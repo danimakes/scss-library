@@ -1,0 +1,14 @@
+// Interpolation of a map
+// >>   @include interpolate(
+//          ( color: red, font-size: 2rem )
+//      )
+//
+// ->   color: red;
+//      font-size: 2rem;
+@mixin interpolate(
+    $map
+) {
+    @each $property, $value in $map {
+        #{$property}: $value;
+    }
+}
