@@ -8,7 +8,8 @@ A collection of SCSS' mixins and functions I use in my projects
 ```
 scss
   |-- scss2               // collection of scss-like functions
-        |-- _list2.scss   // collection of list's functions
+        |-- _list2.scss   // collection of list-related functions
+        |-- _map2.scss    // collection of map-related functions
 LICENSE
 README.md
 ```
