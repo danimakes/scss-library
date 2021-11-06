@@ -1,0 +1,87 @@
+@use 'sass:list';
+
+// Creates a copy of the list without the $n -th element
+// >>   remove-nth(
+//          apple orange peach,
+//          2
+//      )
+//
+// ->   (apple peach)
+@function remove-nth($list, $n){
+    $new-list: ();
+
+    // negative index
+    $n: if($n < 0, list.length($list) + $n + 1, $n);
+
+    $is-bracketed: list.is-bracketed($list);
+    $separator: list.separator($list);
+
+    @for $i from 1 through list.length($list) {
+        @if $i != $n {
+            $new-list: list.append($new-list, list.nth($list, $i));
+        }
+    }
+
+    @return list.join((), $new-list, $separator, $is-bracketed);
+}
+
+// Returns true if the list contains a specified element
+// >>   contains(
+//          apple orange peach,
+//          banana
+//      )
+//
+// ->   false
+@function contains($list, $item) {
+    @return list.index($list, $item) != null;
+}
+
+// Returns the first element in a list
+// >>   contains(
+//          apple orange peach
+//      )
+//
+// ->   apple
+@function first($list) {
+    @return list.nth($list, 1);
+}
+
+// Returns the second element in a list
+// >>   contains(
+//          apple orange peach
+//      )
+//
+// ->   orange
+@function second($list) {
+    @return list.nth($list, 2);
+}
+
+// Returns the last element in a list
+// >>   contains(
+//          apple orange peach
+//      )
+//
+// ->   peach
+@function last($list) {
+    @return list.nth($list, -1);
+}
+
+// Like first(), returns the first element in a list
+// >>   contains(
+//          apple orange peach
+//      )
+//
+// ->   apple
+@function head($list) {
+    @return first($list);
+}
+
+// Returns the list without the first element
+// >>   contains(
+//          apple orange peach
+//      )
+//
+// ->   (orange peach)
+@function tail($list) {
+    @return remove-nth($list, 1);
+}
