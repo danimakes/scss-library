@@ -1,7 +1,7 @@
 @use 'sass:list';
 
 // Creates a copy of the list without the $n -th element
-// >>   remove-nth(
+// >>   @debug remove-nth(
 //          apple orange peach,
 //          2
 //      )
@@ -26,7 +26,7 @@
 }
 
 // Returns true if the list contains a specified element
-// >>   contains(
+// >>   @debug contains(
 //          apple orange peach,
 //          banana
 //      )
@@ -37,7 +37,7 @@
 }
 
 // Returns the first element in a list
-// >>   contains(
+// >>   @debug first(
 //          apple orange peach
 //      )
 //
@@ -47,7 +47,7 @@
 }
 
 // Returns the second element in a list
-// >>   contains(
+// >>   @debug second(
 //          apple orange peach
 //      )
 //
@@ -57,7 +57,7 @@
 }
 
 // Returns the last element in a list
-// >>   contains(
+// >>   @debug last(
 //          apple orange peach
 //      )
 //
@@ -67,7 +67,7 @@
 }
 
 // Like first(), returns the first element in a list
-// >>   contains(
+// >>   @debug head(
 //          apple orange peach
 //      )
 //
@@ -77,7 +77,7 @@
 }
 
 // Returns the list without the first element
-// >>   contains(
+// >>   @debug tail(
 //          apple orange peach
 //      )
 //
