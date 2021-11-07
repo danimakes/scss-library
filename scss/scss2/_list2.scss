@@ -1,8 +1,9 @@
 @use 'sass:list';
+@use 'sass:meta';
 
-// Creates a copy of the list without the $n -th element
+// Returns a copy of the list without the $n -th element
 // >>   @debug remove-nth(
-//          apple orange peach,
+//          apple pear peach,
 //          2
 //      )
 //
@@ -27,7 +28,7 @@
 
 // Returns true if the list contains a specified element
 // >>   @debug contains(
-//          apple orange peach,
+//          apple pear peach,
 //          banana
 //      )
 //
@@ -38,7 +39,7 @@
 
 // Returns the first element in a list
 // >>   @debug first(
-//          apple orange peach
+//          apple pear peach
 //      )
 //
 // ->   apple
@@ -48,17 +49,17 @@
 
 // Returns the second element in a list
 // >>   @debug second(
-//          apple orange peach
+//          apple pear peach
 //      )
 //
-// ->   orange
+// ->   pear
 @function second($list) {
     @return list.nth($list, 2);
 }
 
 // Returns the last element in a list
 // >>   @debug last(
-//          apple orange peach
+//          apple pear peach
 //      )
 //
 // ->   peach
@@ -68,7 +69,7 @@
 
 // Like first(), returns the first element in a list
 // >>   @debug head(
-//          apple orange peach
+//          apple pear peach
 //      )
 //
 // ->   apple
@@ -76,12 +77,66 @@
     @return first($list);
 }
 
-// Returns the list without the first element
+// Returns a copy of the list without the first element
 // >>   @debug tail(
-//          apple orange peach
+//          apple pear peach
 //      )
 //
-// ->   (orange peach)
+// ->   (pear peach)
 @function tail($list) {
     @return remove-nth($list, 1);
+}
+
+
+
+
+// Applies a function to every element inside the list
+// and return them as a new list (it has nothing to do
+// with map objects)
+// >>   @use 'sass:meta';
+//
+// >>   @debug map(
+//          apple pear peach,
+//          meta.get-function(quote)
+//      )
+//
+// ->   ("apple" "pear" "peach")
+@function map($list, $function) {
+    $new-list: ();
+
+    @each $item in $list {
+        $new-list: list.append(
+            $new-list, meta.call($function, $item));
+    }
+
+    @return $new-list;
+}
+
+
+// Applies a function to every element inside the list.
+// If the function returns true, that element is added 
+// to the new list
+// >>   @use 'sass:meta';
+//
+// >>   @function not-an-apple($fruit) {
+//          @return $fruit != apple;
+//      }
+//
+// >>   @debug filter(
+//          apple pear peach,
+//          meta.get-function(not-an-apple)
+//      )
+//
+// ->   (pear peach)
+@function filter($list, $function) {
+    $new-list: ();
+
+    @each $item in $list {
+        @if meta.call($function, $item) != false {
+            $new-list: list.append(
+                $new-list, $item);
+        }
+    }
+
+    @return $new-list;
 }

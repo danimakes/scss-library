@@ -1,0 +1,13 @@
+@use '../scss/abstracts/process-args' as *;
+@use '../scss/scss2/list2' as *;
+@use 'sass:meta';
+
+@function add5($n) {
+    @return $n + 5;
+}
+@function not-an-apple($fruit) { @return $fruit != apple; }
+
+@debug filter(
+    apple pear peach,
+    meta.get-function(not-an-apple)
+);

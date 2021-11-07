@@ -1,5 +1,20 @@
 @use 'sass:map';
 
+// Replace a specific keyword inside a map
+// @function replace-keyword($map, $old-keyword, $new-keyword) {
+//     $value: map.get($map, $old-keyword);
+
+//     @if $value != null {
+//         @return map.set(
+//             map.remove($map, $old-keyword),
+//             $new-keyword,
+//             $value
+//         );
+//     }
+
+//     @return $map;
+// }
+
 // Interpolation of a map
 // >>   @include interpolate(
 //          ( color: red, font-size: 2rem )
