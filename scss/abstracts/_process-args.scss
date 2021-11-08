@@ -15,7 +15,7 @@
 }
 
 // Converts a list of items into a map, based on keywords 
-// >>   @debug (
+// >>   @debug list-to-map(
 //          (fruits apple orange colors red blue),
 //          (colors fruits)
 //      )
@@ -29,27 +29,27 @@
     $output-map: ();
 
     $current-keyword: null;
-    $current-sub-list: ();
+    $current-arg-list: ();
 
     @each $item in $list {
         @if is-a-keyword($keywords, $item) { // found a new keyword
 
-            // update output map
+            // updates output map
             @if $current-keyword != null {
                 $output-map: map.set(
-                    $output-map, $current-keyword, $current-sub-list);
+                    $output-map, $current-keyword, $current-arg-list);
             }
 
-            // reset
+            // resets
             $current-keyword: $item;
-            $current-sub-list: ();
+            $current-arg-list: ();
 
         } @else {
-            $current-sub-list: list.append($current-sub-list, $item);
+            $current-arg-list: list.append($current-arg-list, $item);
         }
     }
     
     // adds the last keyword found and returns the map
     @return map.set(
-        $output-map, $current-keyword, $current-sub-list);
+        $output-map, $current-keyword, $current-arg-list);
 }
