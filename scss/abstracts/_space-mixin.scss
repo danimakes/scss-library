@@ -1,0 +1,49 @@
+@use '../scss2/list2';
+@use '../scss2/map2';
+@use 'sass:meta';
+@use 'sass:list';
+
+// Replaces items in a list, based on a map which
+// dictates which items need to be replaced with what
+// >>   @debug replace-keywords(
+//          (apple peach apple pear),
+//          (
+//              apple: banana,      // every apple becomes a banana
+//              pear: strawberry    // every pear  becomes a straberry
+//          )
+//
+// ->   (banana peach banana strawberry)
+@function replace-keywords($list, $keywords-map) {
+    $new-list: ();
+
+    @each $item in $list {
+        $new-list: list.append(
+            $new-list,
+            map2.get($keywords-map, $item, $item)
+        );
+    }
+
+    @return $new-list;
+}
+
+
+@mixin space-mixin($statements, $keywords-map, $fn: null) {
+    @each $statement in $statements {
+
+        // replacing keywords
+        $statement: replace-keywords(
+            $statement, $keywords-map);
+
+        // extracting property name and values
+        $property: list2.head($statement);
+        $values: list2.tail($statement);
+
+        // eventually modifing values
+        @if $fn != null {
+            $values: meta.call($fn, $property, $values...);
+        }
+
+        // finally adding the css
+        #{$property}: $values;
+    }
+}

@@ -1,19 +1,22 @@
 @use 'sass:map';
 
-// Replace a specific keyword inside a map
-// @function replace-keyword($map, $old-keyword, $new-keyword) {
-//     $value: map.get($map, $old-keyword);
-
-//     @if $value != null {
-//         @return map.set(
-//             map.remove($map, $old-keyword),
-//             $new-keyword,
-//             $value
-//         );
-//     }
-
-//     @return $map;
-// }
+// Just like the normal get function, but with a fallback
+// value, which is returned whenever the specified key
+// does not exist
+// >>   @debug get(
+//          (apple: red, banana: yellow),
+//          pear,
+//          "pear's color not found"
+//      );
+//
+// ->   pear's color not found
+@function get($map, $key, $fallback: null) {
+    @if map.has-key($map, $key) {
+        @return map.get($map, $key);
+    }
+    
+    @return $fallback;
+}
 
 // Interpolation of a map
 // >>   @include interpolate(

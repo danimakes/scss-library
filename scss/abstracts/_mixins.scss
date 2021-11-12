@@ -1,0 +1,36 @@
+@use './space-mixin' as sm;
+@use 'sass:list';
+@use 'sass:meta';
+
+// Given a property name and a list of values,
+// if the property is font-family then the values
+// get separated by a comma instead of a space
+// >>   @debug font-family-wants-comma(
+//          font-family,
+//          "Arial" sans-serif
+//      );
+// 
+// ->   "Arial", sans-serif
+@function font-family-wants-comma($property, $values...) {
+    @return if(
+        $property == font-family,
+        list.join((), $values, comma, null),
+        $values
+    );
+}
+
+
+@mixin text($args...) {
+    @include sm.space-mixin(
+        $args,
+        (
+            ff: font-family,
+            fs: font-size,
+            fw: font-weight,
+            lh: line-height,
+            tt: text-transform,
+            td: text-decoration
+        ),
+        meta.get-function(font-family-wants-comma)
+    );
+}

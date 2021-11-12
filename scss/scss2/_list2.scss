@@ -7,7 +7,7 @@
 //          2
 //      )
 //
-// ->   (apple peach)
+// ->   apple peach
 @function remove-nth($list, $n){
     $new-list: ();
 
@@ -82,12 +82,10 @@
 //          apple pear peach
 //      )
 //
-// ->   (pear peach)
+// ->   pear peach
 @function tail($list) {
     @return remove-nth($list, 1);
 }
-
-
 
 
 // Applies a function to every element inside the list
@@ -100,7 +98,7 @@
 //          meta.get-function(quote)
 //      )
 //
-// ->   ("apple" "pear" "peach")
+// ->   "apple" "pear" "peach"
 @function map($list, $function) {
     $new-list: ();
 
@@ -127,7 +125,7 @@
 //          meta.get-function(not-an-apple)
 //      )
 //
-// ->   (pear peach)
+// ->   pear peach
 @function filter($list, $function) {
     $new-list: ();
 
