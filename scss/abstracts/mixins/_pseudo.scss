@@ -2,57 +2,21 @@
 
 
 // pseudo mixin
-// allows to set content, display, position,
-// top, right, bottom, left and inset properties.
-// The following properties have a default value:
-//      content: '';
-//      position: absolute;
-//      display: block;
-// >>   @include pseudo(c 'hello', l 0, t 0) {
-//          width: 100px;
-//          height: 100px;
+// allows to set content property.
+// >>   @include pseudo(c 'hello') {
+//          position: absolute;
+//          display: block;
 //      };
 //
 // ->   content: "hello";
 //      position: absolute;
 //      display: block;
-//      left: 0;
-//      top: 0;
-//      width: 100px;
-//      height: 100px;
 @mixin pseudo($args...) {
     @include sm.new-space-mixin(
         $mixin-args: $args,
-        $properties: (content, display, position, left, right, top, bottom, inset),
+        $properties: (content),
         $properties-short-hand: (
-            c: content,
-
-            d: display,
-
-            p: position,
-            pos: position,
-
-            t: top,
-            r: right,
-            b: bottom,
-            l: left,
-            i: inset
-        ),
-        $values-short-hand: (
-            position: (
-                a: absolute,
-                abs: absolute,
-                r: relative,
-                rel: relative,
-                f: fixed,
-                fix: fixed,
-                s: sticky
-            )
-        ),
-        $default-values: (
-            content: '',
-            position: absolute,
-            display: block
+            c: content
         )
     );
 
