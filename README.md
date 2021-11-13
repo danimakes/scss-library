@@ -4,7 +4,7 @@ A collection of SCSS' mixins and functions I use in my projects
 
 
 ### Idea
-The main idea behind this collection is the different syntax used to pass argument to mixin. Let me show an example:
+The main idea behind this collection is the different syntax used to pass argument to mixins. Let me show an example:
 
 Source SCSS code
 ```scss
@@ -12,7 +12,7 @@ Source SCSS code
   @include text(ff "Arial" sans-serif, fs 2rem, fw b, lh 1.2, tt u);
 
   @include after(c 'hello') {
-      @include position(p a, t 0, l 0);
+      @include absolute(t 0, l 0);
       @include box(w 100%);
   };
 }
@@ -31,9 +31,9 @@ Compiled CSS code
 
 .some-class::after {
   content: "hello";
-  position: absolute;
   top: 0;
   left: 0;
+  position: absolute;
   width: 100%;
   height: 100%;
 }
