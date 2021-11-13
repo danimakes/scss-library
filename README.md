@@ -6,14 +6,16 @@ A collection of SCSS' mixins and functions I use in my projects
 ### Idea
 The main idea behind this collection is the different syntax used to pass argument to mixins. Let me show an example:
 
-Source SCSS code
+SCSS code
 ```scss
-.some-class {
-  @include text(ff "Arial" sans-serif, fs 2rem, fw b, lh 1.2, tt u);
+@use 'scss/abstracs/mixin' as mx;
 
-  @include after(c 'hello') {
-      @include absolute(t 0, l 0);
-      @include box(w 100%);
+.some-class {
+  @include mx.text(ff "Arial" sans-serif, fs 2rem, fw b, lh 1.2, tt u);
+
+  @include mx.after(c 'hello') {
+      @include mx.absolute(t 0, l 0);
+      @include mx.box(w 100%);
   };
 }
 ```
@@ -52,7 +54,7 @@ scss
         |-- mixins                // collection of mixins
         |     |-- _index.scss     // index file
         |     |-- _box-model.scss // box model-related mixins
-        |     |-- _text.scss // text-related mixins
+        |     |-- _text.scss      // text-related mixins
         |
         |-- space-mixin.scss      // main mixin-builder
 .gitignore
