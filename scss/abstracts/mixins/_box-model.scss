@@ -1,0 +1,107 @@
+@use 'sass:meta';
+@use 'sass:map';
+@use '../space-mixin' as sm;
+@use '../../scss2/map2';
+
+// function used in the mixin named 'box'
+@function box-mixin-function($lines) {
+    // extracting width and height
+    $w: map2.get($lines, width);
+    $h: map2.get($lines, height);
+
+    // if height is not set, set height := width
+    @if $w != null and $h == null {
+        @return map.set($lines, height, $w);
+    }
+
+    // if width is not set, set width := height
+    @if $h != null and $w == null {
+        @return map.set($lines, width, $h);
+    }
+}
+
+// box mixin
+// allows to set width and height properties
+// >>   @include box(w 200px, h 3rem);
+//
+// ->   width: 200px;
+//      height: 3rem;
+@mixin box($args...) {
+    @include sm.new-space-mixin(
+        $mixin-args: $args,
+        $properties: (width, height),
+        $properties-short-hand: (w: width, h: height),
+        $values-short-hand: (),
+        $fn: meta.get-function(box-mixin-function)
+    );
+}
+
+
+// position mixin
+// allows to set position, top, right,
+// bottom, left and inset properties
+// >>   @include position(pos abs, l 1rem, t 64px);
+//
+// ->   position: absolute;
+//      left: 1rem;
+//      top: 64px;
+@mixin position($args...) {
+    @include sm.new-space-mixin(
+        $mixin-args: $args,
+        $properties: (position, left, right, top, bottom, inset),
+        $properties-short-hand: (
+            p: position,
+            pos: position,
+
+            t: top,
+            r: right,
+            b: bottom,
+            l: left,
+            i: inset
+        ),
+        $values-short-hand: (
+            position: (
+                a: absolute,
+                abs: absolute,
+                r: relative,
+                rel: relative,
+                f: fixed,
+                fix: fixed,
+                s: sticky
+            )
+        )
+    );
+}
+
+
+// relative mixin
+// is an extension of the position mixin,
+// allows to set top, right, bottom, left
+// and inset properties.
+// Position is set ahead to relative
+// >>   @include relative(l 1rem, t 64px);
+//
+// ->   left: 1rem;
+//      top: 64px;
+//      position: relative;
+@mixin relative($args...) {
+    $args: list.join($args, (pos rel,), comma);
+    @include position($args...);
+}
+
+
+// absolute mixin
+// is an extension of the position mixin,
+// allows to set top, right, bottom, left
+// and inset properties.
+// Position is set ahead to absolute
+// >>   @include relative(l 1rem, t 64px);
+//
+// ->   left: 1rem;
+//      top: 64px;
+//      position: absolute;
+@mixin absolute($args...) {
+    $args: list.join($args, (pos abs,), comma);
+    @include position($args...);
+}
+

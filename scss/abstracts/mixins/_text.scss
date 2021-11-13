@@ -1,0 +1,71 @@
+@use 'sass:meta';
+@use 'sass:list';
+@use 'sass:map';
+@use '../space-mixin' as sm;
+@use '../../scss2/map2';
+
+// function used in the mixin named 'text'
+@function text-mixin-function($lines) {
+    // comma-separates font-family values
+    $fonts: map2.get($lines, font-family);
+    @if $fonts != null {
+        @return map.set($lines, font-family, list.join((), $fonts, comma));
+    }
+
+    @return $lines;
+}
+
+// text mixin
+// allows to set font-family, font-size, font-weight,
+// line-height, text-align, text-decoration, text-overflow,
+// text-transform properties
+// >>   @include text(ff "Arial" sans-serif, fs 2rem, fw b, lh 1.2, tt u);
+//
+// ->   font-family: "Arial", sans-serif;
+//      font-size: 2rem;
+//      font-weight: bold;
+//      line-height: 1.2;
+//      text-transform: uppercase;
+@mixin text($args...) {
+    @include sm.new-space-mixin(
+        $args, 
+        (
+            font-family,
+            font-size,
+            font-weight,
+
+            line-height,
+
+            text-align,
+            text-decoration,
+            text-overflow,
+            text-transform
+        ), 
+        (
+            ff: font-family,
+            fs: font-size,
+            fw: font-weight,
+
+            lh: line-height,
+
+            ta: text-align,
+            td: text-decoration,
+            to: text-overflow,
+            tt: text-transform
+        ),
+        (
+            font-weight: (
+                b: bold,
+                t: thin,
+                k: black
+            ),
+            text-transform: (
+                l: lowercase,
+                c: capitalize,
+                u: uppercase
+            ),
+
+        ),
+        meta.get-function(text-mixin-function)
+    );
+}
