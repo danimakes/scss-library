@@ -1,36 +1,124 @@
-@use './space-mixin' as sm;
-@use 'sass:list';
 @use 'sass:meta';
+@use 'sass:list';
+@use 'sass:map';
+@use './space-mixin' as sm;
+@use '../scss2/map2';
 
-// Given a property name and a list of values,
-// if the property is font-family then the values
-// get separated by a comma instead of a space
-// >>   @debug font-family-wants-comma(
-//          font-family,
-//          "Arial" sans-serif
-//      );
-// 
-// ->   "Arial", sans-serif
-@function font-family-wants-comma($property, $values...) {
-    @return if(
-        $property == font-family,
-        list.join((), $values, comma, null),
-        $values
-    );
+@function text-mixin-function($lines) {
+    // comma-separates font-family values
+    $fonts: map2.get($lines, font-family);
+    @if $fonts != null {
+        @return map.set($lines, font-family, list.join((), $fonts, comma));
+    }
+
+    @return $lines;
 }
 
 
 @mixin text($args...) {
-    @include sm.space-mixin(
-        $args,
+    @include sm.new-space-mixin(
+        $args, 
+        (
+            font-family,
+            font-size,
+            font-weight,
+
+            line-height,
+
+            text-align,
+            text-decoration,
+            text-overflow,
+            text-transform
+        ), 
         (
             ff: font-family,
             fs: font-size,
             fw: font-weight,
+
             lh: line-height,
-            tt: text-transform,
-            td: text-decoration
+
+            ta: text-align,
+            td: text-decoration,
+            to: text-overflow,
+            tt: text-transform
         ),
-        meta.get-function(font-family-wants-comma)
+        (
+            font-weight: (
+                b: bold,
+                t: thin,
+                k: black
+            ),
+            text-transform: (
+                l: lowercase,
+                c: capitalize,
+                u: uppercase
+            ),
+
+        ),
+        meta.get-function(text-mixin-function)
+    );
+}
+
+
+
+
+
+@mixin position($args...) {
+    @include sm.new-space-mixin(
+        $args,
+        (position, left, right, top, bottom, inset),
+        (
+            p: position,
+            pos: position,
+
+            t: top,
+            r: right,
+            b: bottom,
+            l: left,
+            i: inset
+        ),
+        (
+            position: (
+                a: absolute,
+                abs: absolute,
+                r: relative,
+                rel: relative,
+                f: fixed,
+                fix: fixed,
+                s: sticky
+            )
+        )
+    );
+}
+
+@mixin relative($args...) {
+    $args: list.join($args, (pos rel,), comma);
+    @include position($args...);
+}
+
+@mixin absolute($args...) {
+    $args: list.join($args, (pos abs,), comma);
+    @include position($args...);
+}
+
+@function box-mixin-function($lines) {
+    $w: map2.get($lines, width);
+    $h: map2.get($lines, height);
+
+    @if $w != null and $h == null {
+        @return map.set($lines, height, $w);
+    }
+
+    @if $h != null and $w == null {
+        @return map.set($lines, width, $h);
+    }
+}
+
+@mixin box($args...) {
+    @include sm.new-space-mixin(
+        $args,
+        (width, height),
+        (w: width, h: height),
+        $fn: meta.get-function(box-mixin-function)
     );
 }

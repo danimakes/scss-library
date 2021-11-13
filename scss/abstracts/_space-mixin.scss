@@ -1,49 +1,60 @@
-@use '../scss2/list2';
-@use '../scss2/map2';
 @use 'sass:meta';
 @use 'sass:list';
+@use 'sass:map';
+@use '../scss2/list2';
+@use '../scss2/map2';
 
-// Replaces items in a list, based on a map which
-// dictates which items need to be replaced with what
-// >>   @debug replace-keywords(
-//          (apple peach apple pear),
-//          (
-//              apple: banana,      // every apple becomes a banana
-//              pear: strawberry    // every pear  becomes a straberry
-//          )
-//
-// ->   (banana peach banana strawberry)
-@function replace-keywords($list, $keywords-map) {
-    $new-list: ();
+@mixin new-space-mixin(
+    $mixin-args,
+    $properties,
+    $properties-short-hand: (),
+    $values-short-hand: (),
+    $fn: null
+) {
+    // map containing every property: value set
+    $lines: ();
 
-    @each $item in $list {
-        $new-list: list.append(
-            $new-list,
-            map2.get($keywords-map, $item, $item)
-        );
-    }
+    @each $line in $mixin-args {
+        $property: list2.head($line);
+        $values: list2.tail($line);
+        
+        // replacing property's short-hand
+        $property: map2.get($properties-short-hand, $property, $property);
 
-    @return $new-list;
-}
-
-
-@mixin space-mixin($statements, $keywords-map, $fn: null) {
-    @each $statement in $statements {
-
-        // replacing keywords
-        $statement: replace-keywords(
-            $statement, $keywords-map);
-
-        // extracting property name and values
-        $property: list2.head($statement);
-        $values: list2.tail($statement);
-
-        // eventually modifing values
-        @if $fn != null {
-            $values: meta.call($fn, $property, $values...);
+        // checking if the given property is allowed
+        @if list2.contains($properties, $property) == false {
+            @error 'Undefined property `#{list2.head($line)}`';
         }
 
-        // finally adding the css
-        #{$property}: $values;
+        // replacing values' short-hand
+        $new-values: ();
+        $current-values-short-hand: map2.get($values-short-hand, $property);
+        @if $current-values-short-hand != null {
+            @each $value in $values {
+                $value: map2.get($current-values-short-hand, $value, $value);
+                $new-values: list.append($new-values, $value);
+            }
+        } @else {
+            $new-values: $values;
+        }
+
+
+        // adding to the map
+        $lines: map.set($lines, $property, $new-values);
+
+    }
+
+    // processing values
+    @if $fn != null {
+        $lines: meta.call($fn, $lines);
+    }
+
+    // finally adding css 
+    @each $property, $value in $lines {
+        @if list.length($value) == 0 {
+            @error 'Empty Argument List `#{$property}: ()`';
+        }
+
+        #{$property}: $value;
     }
 }
