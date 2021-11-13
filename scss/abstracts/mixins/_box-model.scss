@@ -4,7 +4,7 @@
 @use '../../scss2/map2';
 
 // function used in the mixin named 'box'
-@function box-mixin-function($lines) {
+@function __box-mixin-function($lines) {
     // extracting width and height
     $w: map2.get($lines, width);
     $h: map2.get($lines, height);
@@ -32,7 +32,8 @@
         $properties: (width, height),
         $properties-short-hand: (w: width, h: height),
         $values-short-hand: (),
-        $fn: meta.get-function(box-mixin-function)
+        $default-values: (),
+        $fn: meta.get-function(__box-mixin-function)
     );
 }
 

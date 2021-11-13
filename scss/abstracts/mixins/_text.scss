@@ -5,7 +5,7 @@
 @use '../../scss2/map2';
 
 // function used in the mixin named 'text'
-@function text-mixin-function($lines) {
+@function __text-mixin-function($lines) {
     // comma-separates font-family values
     $fonts: map2.get($lines, font-family);
     @if $fonts != null {
@@ -28,8 +28,8 @@
 //      text-transform: uppercase;
 @mixin text($args...) {
     @include sm.new-space-mixin(
-        $args, 
-        (
+        $mixin-args: $args, 
+        $properties: (
             font-family,
             font-size,
             font-weight,
@@ -41,7 +41,7 @@
             text-overflow,
             text-transform
         ), 
-        (
+        $properties-short-hand: (
             ff: font-family,
             fs: font-size,
             fw: font-weight,
@@ -53,7 +53,7 @@
             to: text-overflow,
             tt: text-transform
         ),
-        (
+        $values-short-hand: (
             font-weight: (
                 b: bold,
                 t: thin,
@@ -66,6 +66,7 @@
             ),
 
         ),
-        meta.get-function(text-mixin-function)
+        $default-values: (),
+        $fn: meta.get-function(__text-mixin-function)
     );
 }

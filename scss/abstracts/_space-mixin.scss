@@ -4,15 +4,15 @@
 @use '../scss2/list2';
 @use '../scss2/map2';
 
-@mixin new-space-mixin(
+@function space-function(
     $mixin-args,
     $properties,
     $properties-short-hand: (),
     $values-short-hand: (),
-    $fn: null
+    $default-values: ()
 ) {
     // map containing every property: value set
-    $lines: ();
+    $lines: $default-values;
 
     @each $line in $mixin-args {
         $property: list2.head($line);
@@ -38,11 +38,25 @@
             $new-values: $values;
         }
 
-
         // adding to the map
         $lines: map.set($lines, $property, $new-values);
 
     }
+
+    @return $lines;
+}
+
+
+@mixin new-space-mixin(
+    $mixin-args,
+    $properties,
+    $properties-short-hand: (),
+    $values-short-hand: (),
+    $default-values: (),
+    $fn: null
+) {
+    $lines: space-function($mixin-args, $properties,
+        $properties-short-hand, $values-short-hand, $default-values);
 
     // processing values
     @if $fn != null {
