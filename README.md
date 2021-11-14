@@ -56,7 +56,7 @@ scss
         |     |-- _box-model.scss // box model-related mixins
         |     |-- _text.scss      // text-related mixins
         |
-        |-- space-mixin.scss      // main mixin-builder
+        |-- _space-mixin.scss      // main mixin-builder
 .gitignore
 LICENSE
 README.md
