@@ -70,3 +70,8 @@
         $fn: meta.get-function(__text-mixin-function)
     );
 }
+
+// text inherit mixin
+@mixin text-inherit {
+    @include text(ff inherit, fs inherit, fw inherit, lh inherit, ta inherit, td inherit, to inherit, tt inherit);
+}

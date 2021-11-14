@@ -19,6 +19,8 @@
     @if $h != null and $w == null {
         @return map.set($lines, width, $h);
     }
+
+    @return $lines;
 }
 
 // box mixin
@@ -36,6 +38,11 @@
         $default-values: (),
         $fn: meta.get-function(__box-mixin-function)
     );
+}
+
+// full 100% by 100% box
+@mixin box-100 {
+    @include box(w 100%, h 100%);
 }
 
 
