@@ -65,7 +65,7 @@
 
     // finally adding css 
     @each $property, $value in $lines {
-        @if list.length($value) == 0 {
+        @if meta.type-of($value) == list and list.length($value) == 0 {
             @error 'Empty Argument List `#{$property}: ()`';
         }
 

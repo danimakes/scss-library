@@ -2,15 +2,51 @@
 @use 'sass:list';
 @use 'sass:map';
 @use '../space-mixin' as sm;
+@use '../variables' as vars;
 @use '../../scss2/map2';
 
 // function used in the mixin named 'text'
 @function __text-mixin-function($lines) {
     // comma-separates font-family values
-    $fonts: map2.get($lines, font-family);
-    @if $fonts != null {
-        @return map.set($lines, font-family, list.join((), $fonts, comma));
+    $family: map2.get($lines, font-family);
+    @if $family != null {
+        $lines: map.set(
+            $lines,
+            font-family,
+            list.join((), $family, comma)
+        );
     }
+
+    // tries retrieve font-size from the map "font-sizes"
+    // if it fails, the specified value is returned
+    $size: map2.get($lines, font-size);
+    @if $size != null {
+        @if meta.type-of($size) == list and list.length($size) == 1 {
+            $size: list.nth($size, 1);
+        }
+
+        $lines: map.set(
+            $lines,
+            font-size,
+            map2.get(vars.$font-sizes, $size, $size)
+        );
+    }
+
+    // tries retrieve font-weight from the map "font-weights"
+    // if it fails, the specified value is returned
+    $weight: map2.get($lines, font-weight);
+    @if $weight != null {
+        @if meta.type-of($weight) == list and list.length($weight) == 1 {
+            $weight: list.nth($weight, 1);
+        }
+
+        $lines: map.set(
+            $lines,
+            font-weight,
+            map2.get(vars.$font-weights, $weight, $weight)
+        );
+    }
+
 
     @return $lines;
 }
